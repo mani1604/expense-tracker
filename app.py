@@ -50,6 +50,10 @@ def register():
 def login():
     return "<h1>Login</h1>"
 
+@app.route('/logout')
+def logout():
+    return "<h1>Logout</h1>"
+
 @app.route("/ping")
 def ping():
     return "I am pinging"
