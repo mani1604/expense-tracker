@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, redirect
+from flask import Flask, request, url_for, redirect, jsonify
 
 app = Flask(__name__)
 
@@ -24,6 +24,27 @@ def add_expenses():
         desc = request.form.get('desc')
         print(f"Added {desc}")
         return redirect(url_for('add_expenses'))
+
+@app.route('/dashboard')
+def dashboard():
+    return "<h1>My Dashboard</h1>"
+
+@app.route('/register')
+def register():
+    return "<h1>Register</h1>"
+
+@app.route('/login')
+def login():
+    return "<h1>Login</h1>"
+
+@app.route("/ping")
+def ping():
+    return "I am pinging"
+
+
+@app.route('/api/summary')
+def expense_summary():
+    return jsonify({"total": 5100, 'currency': 'INR'})
 
 if __name__ == "__main__":
     app.run(debug=True)
