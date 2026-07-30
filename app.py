@@ -1,10 +1,10 @@
-from flask import Flask, request, url_for, redirect, jsonify
+from flask import Flask, request, url_for, redirect, jsonify, render_template
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "<h1>Welcome to Expense Tracker</h1>"
+    return render_template('home.html')
 
 @app.route("/expenses")
 def expenses():
