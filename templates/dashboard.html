@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Expense Tracker{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom:1rem;">Welcome, {{ username }}!</h2>
+
+<div class="summary-grid">
+    <div class="summary-card">
+        <h3>₹{{ total_amount }}</h3>
+        <p>Total Spent</p>
+    </div>
+    <div class="summary-card">
+        <h3>{{ count }}</h3>
+        <p>Transactions</p>
+    </div>
+    <div class="summary-card">
+        <h3>{{ categories }}</h3>
+        <p>Categories</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Spending by Category</h3>
+    <br>
+    {% if breakdown %}
+        {% for category, amount in breakdown.items() %}
+        <div class="expense-row">
+            <span class="badge">{{ category }}</span>
+            <span class="amount">₹{{ amount }}</span>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:#888;">No expenses yet. <a href="{{ url_for('add_expenses') }}">Add one!</a></p>
+    {% endif %}
+</div>
+
+<a href="{{ url_for('add_expenses') }}" class="btn">+ Add Expense</a>
+{% endblock %}

@@ -2,6 +2,16 @@ from flask import Flask, request, url_for, redirect, jsonify, render_template
 
 app = Flask(__name__)
 
+# Hardcoded data, we will replace it with DB later
+user_expenses = [
+        {'description': 'Groceries', 'amount': 850, 'category': 'Food'},
+        {'description': 'Uber ride', 'amount': 220, 'category': 'Transport'},
+        {'description': 'Lunch', 'amount': 400, 'category': 'Food'},
+        {'description': 'Electricity bill', 'amount': 1200, 'category': 'Bills'},
+        {'description': 'Ola ride', 'amount': 180, 'category': 'Transport'},
+        {'description': 'Netflix', 'amount': 499, 'category': 'Entertainment'},
+    ]
+
 @app.route("/")
 def home():
     return render_template('home.html')
@@ -40,7 +50,27 @@ def add_expenses():
 
 @app.route('/dashboard')
 def dashboard():
-    return "<h1>My Dashboard</h1>"
+    total = 0
+    categories = set()
+    for expense in user_expenses:
+        total += expense['amount']
+        categories.add(expense['category'])
+
+    n_categories = len(categories)
+    n_transactions = len(user_expenses)
+
+    # Calculating the category wise total amount
+    breakdown_amount = {}
+    for expense in user_expenses:
+        # {'description': 'Groceries', 'amount': 850, 'category': 'Food'}   
+        if expense['category'] in breakdown_amount:
+             breakdown_amount[expense['category']] += expense['amount']
+        else:
+            breakdown_amount[expense['category']] = expense['amount']
+    
+    return render_template("dashboard.html", username="John", total_amount=total, 
+                           count=n_transactions,categories=n_categories,
+                           breakdown=breakdown_amount)
 
 @app.route('/register')
 def register():
