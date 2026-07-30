@@ -16,6 +16,19 @@ def expenses():
 """
     return res
 
+@app.route('/expenses/<int:expense_id>')
+def expense_detail(expense_id):
+    return f"<h1>Expense ID: {expense_id}</h1>"
+
+@app.route('/expenses/<int:expense_id>/delete', methods=["POST"])
+def delete_expense(expense_id):
+    # The expense gets deleted from the DB
+    return redirect(url_for('expenses'))
+
+@app.route('/expenses/category/<string:category_name>')
+def expenses_by_category(category_name):
+    return f"<h2>Expenses in category {category_name}</h2>"
+
 @app.route("/add", methods=["GET", "POST"])
 def add_expenses():
     if request.method == "GET":
