@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Expense - Expense Tracker{% endblock %}
+
+{% block content %}
+
+<div class="card" style="max-width: 480px; margin: auto;">
+    <h2>Add New Expense</h2>
+    <br>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div style="margin-bottom: 1rem;">
+            {{ form.description.label }}
+            {{ form.description(placeholder="e.g. Lunch at restaurant") }}
+            {% for error in form.description.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            {{ form.amount.label }}
+            {{ form.amount(placeholder="0.00") }}
+            {% for error in form.amount.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            {{ form.category.label }}
+            {{ form.category() }}
+            {% for error in form.category.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+        {{ form.submit(class="btn") }}
+        &nbsp;
+        <a href="{{ url_for('expenses') }}" style="color:#888;">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock %}

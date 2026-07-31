@@ -1,6 +1,7 @@
 from flask import Flask, request, url_for, redirect, jsonify, render_template, flash
 from dotenv import load_dotenv
 import os
+from forms import ExpenseForm
 
 load_dotenv() # reads the .env file & loads the env variables
 
@@ -58,12 +59,18 @@ def expenses_by_category(category_name):
 
 @app.route("/add", methods=["GET", "POST"])
 def add_expenses():
-    if request.method == "GET":
-        return "<form method='POST'><input name='desc'><button>Add</button></form>"
-    elif request.method == "POST":
-        desc = request.form.get('desc')
-        flash(f"{desc} added successfully", "success")
-        return redirect(url_for('add_expenses'))
+    form = ExpenseForm()
+
+    if form.validate_on_submit():
+        description = form.description.data
+        amount = form.amount.data
+        category = form.category.data
+
+        # Save the data in DB (later)
+        flash(f"Expense of amount {amount} added.", "success")
+        return redirect(url_for('expenses'))
+
+    return render_template('add_expense.html', form=form)
 
 @app.route('/dashboard')
 def dashboard():
