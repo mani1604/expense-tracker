@@ -14,8 +14,11 @@ How to generate secret key:
 python -c "import secrets; print(secrets.token_hex(32))"
 
 3. Copy the output of this command and paste it in .env file
+
+NOTE: secret key is required for Flask-WForms and Flash messages
 """
 app.config['SECRET_KEY'] = os.environ.get("APP_SECRET_KEY")
+
 # Hardcoded data, we will replace it with DB later
 user_expenses = [
         {'id': 1, 'description': 'Groceries', 'amount': 850, 'category': 'Food', 'date': '20-01-2026'},
