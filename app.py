@@ -1,7 +1,21 @@
-from flask import Flask, request, url_for, redirect, jsonify, render_template
+from flask import Flask, request, url_for, redirect, jsonify, render_template, flash
+from dotenv import load_dotenv
+import os
+
+load_dotenv() # reads the .env file & loads the env variables
 
 app = Flask(__name__)
 
+"""
+How to generate secret key:
+1. Open terminal
+
+2. Run the below command:
+python -c "import secrets; print(secrets.token_hex(32))"
+
+3. Copy the output of this command and paste it in .env file
+"""
+app.config['SECRET_KEY'] = os.environ.get("APP_SECRET_KEY")
 # Hardcoded data, we will replace it with DB later
 user_expenses = [
         {'id': 1, 'description': 'Groceries', 'amount': 850, 'category': 'Food', 'date': '20-01-2026'},
@@ -45,7 +59,7 @@ def add_expenses():
         return "<form method='POST'><input name='desc'><button>Add</button></form>"
     elif request.method == "POST":
         desc = request.form.get('desc')
-        print(f"Added {desc}")
+        flash(f"{desc} added successfully", "success")
         return redirect(url_for('add_expenses'))
 
 @app.route('/dashboard')
