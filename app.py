@@ -4,12 +4,12 @@ app = Flask(__name__)
 
 # Hardcoded data, we will replace it with DB later
 user_expenses = [
-        {'description': 'Groceries', 'amount': 850, 'category': 'Food'},
-        {'description': 'Uber ride', 'amount': 220, 'category': 'Transport'},
-        {'description': 'Lunch', 'amount': 400, 'category': 'Food'},
-        {'description': 'Electricity bill', 'amount': 1200, 'category': 'Bills'},
-        {'description': 'Ola ride', 'amount': 180, 'category': 'Transport'},
-        {'description': 'Netflix', 'amount': 499, 'category': 'Entertainment'},
+        {'id': 1, 'description': 'Groceries', 'amount': 850, 'category': 'Food'},
+        {'id': 2, 'description': 'Uber ride', 'amount': 220, 'category': 'Transport'},
+        {'id': 3, 'description': 'Lunch', 'amount': 400, 'category': 'Food'},
+        {'id': 4, 'description': 'Electricity bill', 'amount': 1200, 'category': 'Bills'},
+        {'id': 5, 'description': 'Ola ride', 'amount': 180, 'category': 'Transport'},
+        {'id': 6, 'description': 'Netflix', 'amount': 499, 'category': 'Entertainment'},
     ]
 
 @app.route("/")
@@ -24,7 +24,7 @@ def expenses():
 <h2>Expenses URL: {url_for('expenses')}</h2>
 <h2>Add URL: {url_for('add_expenses')}</h2>
 """
-    return res
+    return render_template("expenses.html", expenses=user_expenses)
 
 @app.route('/expenses/<int:expense_id>')
 def expense_detail(expense_id):
@@ -62,7 +62,6 @@ def dashboard():
     # Calculating the category wise total amount
     breakdown_amount = {}
     for expense in user_expenses:
-        # {'description': 'Groceries', 'amount': 850, 'category': 'Food'}   
         if expense['category'] in breakdown_amount:
              breakdown_amount[expense['category']] += expense['amount']
         else:
