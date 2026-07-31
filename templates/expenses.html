@@ -21,10 +21,9 @@
         <div class="expense-row">
 
             <div>
-
                 <span class="badge">{{ expense.category }}</span>
 
-                <strong style="margin-left:0.5rem;">{{ expense.description }}</strong>
+                <strong style="margin-left:0.5rem;">{{ expense.description | title }}</strong>
 
                 <br>
 
@@ -34,7 +33,7 @@
 
             <div style="display:flex; align-items:center; gap:1rem;">
 
-                <span class="amount">₹{{ expense.amount }}</span>
+                <span class="amount">₹{{ expense.amount | round(2) }}</span>
 
                 <form method="POST"
 

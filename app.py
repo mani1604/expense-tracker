@@ -4,12 +4,12 @@ app = Flask(__name__)
 
 # Hardcoded data, we will replace it with DB later
 user_expenses = [
-        {'id': 1, 'description': 'Groceries', 'amount': 850, 'category': 'Food'},
-        {'id': 2, 'description': 'Uber ride', 'amount': 220, 'category': 'Transport'},
-        {'id': 3, 'description': 'Lunch', 'amount': 400, 'category': 'Food'},
-        {'id': 4, 'description': 'Electricity bill', 'amount': 1200, 'category': 'Bills'},
-        {'id': 5, 'description': 'Ola ride', 'amount': 180, 'category': 'Transport'},
-        {'id': 6, 'description': 'Netflix', 'amount': 499, 'category': 'Entertainment'},
+        {'id': 1, 'description': 'Groceries', 'amount': 850, 'category': 'Food', 'date': '20-01-2026'},
+        {'id': 2, 'description': 'Uber ride', 'amount': 220.9765, 'category': 'Transport', 'date': '10-02-2026'},
+        {'id': 3, 'description': 'Lunch', 'amount': 400, 'category': 'Food', 'date': '04-03-2026'},
+        {'id': 4, 'description': 'Electricity bill', 'amount': 1200, 'category': 'Bills', 'date': '14-03-2026'},
+        {'id': 5, 'description': 'Ola ride', 'amount': 180, 'category': 'Transport', 'date': '27-04-2026'},
+        {'id': 6, 'description': 'Netflix', 'amount': 499, 'category': 'Entertainment', 'date': '11-05-2026'},
     ]
 
 @app.route("/")
