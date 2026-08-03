@@ -1,7 +1,8 @@
 from flask import Flask, request, url_for, redirect, jsonify, render_template, flash
 from dotenv import load_dotenv
 import os
-from forms import ExpenseForm
+from forms import ExpenseForm, RegisterForm, LoginForm
+from werkzeug.security import generate_password_hash
 
 load_dotenv() # reads the .env file & loads the env variables
 
@@ -21,6 +22,8 @@ NOTE: secret key is required for Flask-WForms and Flash messages
 app.config['SECRET_KEY'] = os.environ.get("APP_SECRET_KEY")
 
 # Hardcoded data, we will replace it with DB later
+users = []
+
 user_expenses = [
         {'id': 1, 'description': 'Groceries', 'amount': 850, 'category': 'Food', 'date': '20-01-2026'},
         {'id': 2, 'description': 'Uber ride', 'amount': 220.9765, 'category': 'Transport', 'date': '10-02-2026'},
@@ -95,13 +98,32 @@ def dashboard():
                            count=n_transactions,categories=n_categories,
                            breakdown=breakdown_amount)
 
-@app.route('/register')
+@app.route('/register', methods=["GET", "POST"])
 def register():
-    return "<h1>Register</h1>"
+    form = RegisterForm()
+    if form.validate_on_submit():
+        # check user exists
+        for user in users:
+            if user['username'] == form.username.data:
+                flash("Username already exists, choose a different username", "error")
+                return render_template("register.html", form=form)
+            elif user['email'] == form.email.data:
+                flash("Account already exists with the email", "error")
+                return render_template("register.html", form=form)
+        users.append({
+            'id': len(users) + 1,
+            'username': form.username.data,
+            'email': form.email.data,
+            'password': generate_password_hash(form.password.data)
+        })
+        flash("Account created! Please login", "success")
+        return redirect(url_for('login'))
+    return render_template("register.html", form=form)
 
 @app.route('/login')
 def login():
-    return "<h1>Login</h1>"
+    form = LoginForm()
+    return render_template("login.html", form=form)
 
 @app.route('/logout')
 def logout():
@@ -109,8 +131,7 @@ def logout():
 
 @app.route("/ping")
 def ping():
-    return "I am pinging"
-
+    return f'Users:{users}'
 
 @app.route('/api/summary')
 def expense_summary():

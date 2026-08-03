@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Login - Expense Tracker{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 400px; margin: auto;">
+    <h2>Login</h2>
+    <br>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div style="margin-bottom:1rem;">
+            {{ form.email.label }}
+            {{ form.email(placeholder="your@email.com") }}
+            {% for error in form.email.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div style="margin-bottom:1rem;">
+            {{ form.password.label }}
+            {{ form.password(placeholder="Your password") }}
+            {% for error in form.password.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="btn") }}
+    </form>
+    <br>
+    <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Register - Expense Tracker{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 450px; margin: auto;">
+    <h2>Create Account</h2>
+    <br>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div style="margin-bottom:1rem;">
+            {{ form.username.label }}
+            {{ form.username(placeholder="Choose a username") }}
+            {% for error in form.username.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div style="margin-bottom:1rem;">
+            {{ form.email.label }}
+            {{ form.email(placeholder="your@email.com") }}
+            {% for error in form.email.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div style="margin-bottom:1rem;">
+            {{ form.password.label }}
+            {{ form.password(placeholder="Min 6 characters") }}
+            {% for error in form.password.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div style="margin-bottom:1rem;">
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(placeholder="Repeat password") }}
+            {% for error in form.confirm_password.errors %}
+                <small style="color:red;">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="btn") }}
+    </form>
+    <br>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+</div>
+{% endblock %}
