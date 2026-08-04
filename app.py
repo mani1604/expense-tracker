@@ -1,8 +1,11 @@
 from flask import Flask, request, url_for, redirect, jsonify, render_template, flash
 from dotenv import load_dotenv
 import os
+from functools import wraps
 from forms import ExpenseForm, RegisterForm, LoginForm
-from werkzeug.security import generate_password_hash
+from flask import session
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv() # reads the .env file & loads the env variables
 
@@ -21,6 +24,11 @@ NOTE: secret key is required for Flask-WForms and Flash messages
 """
 app.config['SECRET_KEY'] = os.environ.get("APP_SECRET_KEY")
 
+# DB config
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///expense.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
 # Hardcoded data, we will replace it with DB later
 users = []
 
@@ -32,6 +40,15 @@ user_expenses = [
         {'id': 5, 'description': 'Ola ride', 'amount': 180, 'category': 'Transport', 'date': '27-04-2026'},
         {'id': 6, 'description': 'Netflix', 'amount': 499, 'category': 'Entertainment', 'date': '11-05-2026'},
     ]
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get('user_id'):
+            flash('Please log in to continue.', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
 
 @app.route("/")
 def home():
@@ -76,6 +93,7 @@ def add_expenses():
     return render_template('add_expense.html', form=form)
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     total = 0
     categories = set()
@@ -120,14 +138,29 @@ def register():
         return redirect(url_for('login'))
     return render_template("register.html", form=form)
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        user = None
+        for u in users:
+            if u['email'] == form.email.data:
+                user = u
+                break
+
+        if user and check_password_hash(u['password'], form.password.data):
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            flash(f"Welcome back, {user['username']}", "success")
+            return redirect(url_for("dashboard"))
+        flash("Invalid credentials", "error")
     return render_template("login.html", form=form)
 
 @app.route('/logout')
 def logout():
-    return "<h1>Logout</h1>"
+    session.clear()
+    flash("You have been sucessfully logged out!", "success")
+    return redirect(url_for("home"))
 
 @app.route("/ping")
 def ping():
