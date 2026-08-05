@@ -21,7 +21,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 3. Copy the output of this command and paste it in .env file
 
-NOTE: secret key is required for Flask-WForms and Flash messages
+NOTE: secret key is required for Flask-WTForms and Flash messages
 """
 app.config['SECRET_KEY'] = os.environ.get("APP_SECRET_KEY")
 
