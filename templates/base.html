@@ -11,12 +11,15 @@
 <nav>
     <a href="{{ url_for('home') }}"><strong>💰 ExpenseTrack</strong></a>
     <div>
+        {% if session.get('user_id') %}
             <a href="{{ url_for('dashboard') }}">Dashboard</a>
             <a href="{{ url_for('expenses') }}">My Expenses</a>
             <a href="{{ url_for('add_expenses') }}">+ Add</a>
             <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
             <a href="{{ url_for('login') }}">Login</a>
             <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
     </div>
 </nav>
 

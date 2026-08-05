@@ -6,3 +6,8 @@ print(hash)
 print(len(hash))
 
 print(check_password_hash(hash, "hi9"))
+
+from app import User
+
+user = User.query.filter_by(username="tom123").first()
+print(user)

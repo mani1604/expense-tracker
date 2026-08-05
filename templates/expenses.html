@@ -15,60 +15,32 @@
 <div class="card">
 
     {% if expenses %}
-
         {% for expense in expenses %}
-
         <div class="expense-row">
-
             <div>
                 <span class="badge">{{ expense.category }}</span>
-
                 <strong style="margin-left:0.5rem;">{{ expense.description | title }}</strong>
-
                 <br>
-
                 <small style="color:#888;">{{ expense.date }}</small>
-
             </div>
-
             <div style="display:flex; align-items:center; gap:1rem;">
-
                 <span class="amount">₹{{ expense.amount | round(2) }}</span>
-
                 <form method="POST"
-
                       action="{{ url_for('delete_expense', expense_id=expense.id) }}"
-
                       style="display:inline;">
-
                     <button type="submit" class="btn btn-danger"
-
                             onclick="return confirm('Delete this expense?')">
-
                         Delete
-
                     </button>
-
                 </form>
-
             </div>
-
         </div>
-
         {% endfor %}
-
     {% else %}
-
         <p style="color:#888; text-align:center; padding:2rem;">
-
             No expenses recorded yet.
-
             <a href="{{ url_for('add_expenses') }}">Add your first one!</a>
-
         </p>
-
     {% endif %}
-
 </div>
-
 {% endblock %}
