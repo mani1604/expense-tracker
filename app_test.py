@@ -7,7 +7,14 @@ print(len(hash))
 
 print(check_password_hash(hash, "hi9"))
 
-from app import User
+import sqlite3
 
-user = User.query.filter_by(username="tom123").first()
-print(user)
+conn = sqlite3.connect("instance/expense.db")
+cursor = conn.cursor()
+
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+tables = cursor.fetchall()
+
+print("Tables:")
+for table in tables:
+    print(table[0])

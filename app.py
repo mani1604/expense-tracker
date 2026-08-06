@@ -6,6 +6,7 @@ from functools import wraps
 from forms import ExpenseForm, RegisterForm, LoginForm
 from flask import session
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv() # reads the .env file & loads the env variables
@@ -26,10 +27,19 @@ NOTE: secret key is required for Flask-WTForms and Flash messages
 app.config['SECRET_KEY'] = os.environ.get("APP_SECRET_KEY")
 
 # DB config
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///expense.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("POSTGRES_RENDER_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
+from pathlib import Path
+
+with app.app_context():
+    print("URI:", app.config["SQLALCHEMY_DATABASE_URI"])
+    print("Engine URL:", db.engine.url)
+    print("Database file:", Path(db.engine.url.database).resolve())
+
+migrate = Migrate(app, db)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
